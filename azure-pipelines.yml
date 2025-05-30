@@ -20,10 +20,3 @@ stages:
     dependsOn: SAST
     jobs:
       - template: templates/release.yml
-
-  - stage: Deploy
-    displayName: "Deploy to Environment"
-    dependsOn: Release
-    condition: eq(variables['Build.SourceBranchName'], 'main')
-    jobs:
-      - template: templates/deploy.yml
