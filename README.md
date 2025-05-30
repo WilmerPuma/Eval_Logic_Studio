@@ -1,1 +1,0 @@
-Logic Studio Evaluacion
