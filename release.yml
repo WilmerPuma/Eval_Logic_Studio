@@ -1,8 +1,26 @@
 jobs:
   - job: Release
-    displayName: "Publish Artifact"
+    displayName: "Publish Artifact to Azure Artifacts"
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-      - publish: $(System.DefaultWorkingDirectory)/target/*.jar
-        artifact: 'SpringBootApp'
+      - checkout: self
+
+      - script: |
+          echo "<settings>
+                  <servers>
+                    <server>
+                      <id>spring-boot-artifacts</id>
+                      <username>$(System.AccessToken)</username>
+                      <password>$(System.AccessToken)</password>
+                    </server>
+                  </servers>
+                </settings>" > $(Agent.TempDirectory)/settings.xml
+        displayName: "Generate Maven Settings"
+
+      - script: |
+          mvn deploy -s $(Agent.TempDirectory)/settings.xml \
+              -DrepositoryId=spring-boot-artifacts \
+              -Durl=https://pkgs.dev.azure.com/wilmerpuma/Evaluacion_Dev/_packaging/spring-boot-artifacts/maven/v1
+        displayName: "Deploy JAR to Azure Artifacts"
+
