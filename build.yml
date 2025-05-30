@@ -1,0 +1,10 @@
+jobs:
+  - job: Build
+    displayName: "Compile Application"
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - script: |
+          docker build -t my-repo/spring-boot-builder:latest .
+          docker run --rm -v $(System.DefaultWorkingDirectory):/app my-repo/spring-boot-builder:latest
+        displayName: "Build Docker Image and Compile"

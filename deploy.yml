@@ -1,0 +1,15 @@
+jobs:
+  - job: Deploy
+    displayName: "Deploy Application"
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - checkout: self
+      - script: |
+          terraform init
+          terraform apply -auto-approve
+        displayName: "Provision Infrastructure"
+      - script: |
+          scp SpringBootApp.jar user@remote:/path/to/app
+          ssh user@remote "systemctl restart spring-boot-app.service"
+        displayName: "Deploy Application"

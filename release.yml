@@ -1,0 +1,8 @@
+jobs:
+  - job: Release
+    displayName: "Publish Artifact"
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - publish: $(System.DefaultWorkingDirectory)/target/*.jar
+        artifact: 'SpringBootApp'
