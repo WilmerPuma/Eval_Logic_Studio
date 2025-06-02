@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  builder:
+    image: maven:3.9.1-openjdk-17
+    container_name: spring-boot-builder
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: mvn clean package
+
+  spring-boot-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - builder
