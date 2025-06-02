@@ -1,10 +1,15 @@
 jobs:
   - job: Build
-    displayName: "Compile Application"
+    displayName: "Build Application using Docker Compose"
     pool:
       vmImage: 'ubuntu-latest'
     steps:
+      - checkout: self
+
       - script: |
-          docker build -t my-repo/spring-boot-builder:latest .
-          docker run --rm -v $(System.DefaultWorkingDirectory):/app my-repo/spring-boot-builder:latest
-        displayName: "Build Docker Image and Compile"
+          docker-compose -f docker-compose.yml run builder
+        displayName: "Compile Application with Docker Compose"
+
+      - script: |
+          docker-compose -f docker-compose.yml build spring-boot-app
+        displayName: "Build Spring Boot Docker Image"
